@@ -233,6 +233,20 @@
                   "default": false
                 }
               ]
+            },
+            "hideInsteadofQuit": {
+                "description": "Change the default behavior to just hide Nudge instead of the deferral button quitting Nudge. This removes the need for the LaunchAgent to launch Nudge on an interval.",
+                "anyOf": [
+                  {
+                    "type": "null",
+                    "title": "Not Configured"
+                  },
+                  {
+                    "title": "Configured",
+                    "type": "boolean",
+                    "default": false
+                  }
+                ]
             }
           }
         }
