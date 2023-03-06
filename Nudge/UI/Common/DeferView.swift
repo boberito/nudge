@@ -14,6 +14,7 @@ struct DeferView: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.colorScheme) var colorScheme
     
+    
     @State var nudgeCustomEventDate = Utils().getCurrentDate()
     
     var body: some View {
@@ -67,13 +68,16 @@ struct DeferView: View {
                 Utils().logUserQuitDeferrals()
                 Utils().logUserDeferrals()
                 Utils().userInitiatedExit()
+                self.presentationMode.wrappedValue.dismiss()
             } label: {
                 Text(customDeferralDropdownText)
                     .frame(minWidth: 35)
             }
+            
             // a bit of space at the bottom to raise the Defer button away from the very edge
             .padding(.bottom, 10)
         }
+        
     }
     var limitRange: ClosedRange<Date> {
         if viewObserved.daysRemaining > 0 {
