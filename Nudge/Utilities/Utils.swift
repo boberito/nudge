@@ -281,7 +281,11 @@ struct Utils {
     func exitNudge() {
         uiLog.notice("\("Nudge is terminating due to condition met", privacy: .public)")
         nudgePrimaryState.shouldExit = true
-        exit(0)
+        if hideInsteadofQuit {
+            NSApp.hide(nil)
+        } else {
+            exit(0)
+        }
     }
 
     func forceScreenShotIconModeEnabled() -> Bool {
