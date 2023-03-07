@@ -66,6 +66,9 @@ func nudgeStartLogic() {
     let deferralDate = nudgePrimaryState.deferRunUntil ?? nudgePrimaryState.lastRefreshTime
     if (deferralDate > Utils().getCurrentDate()) && !(deferralDate > requiredInstallationDate) && !Utils().pastRequiredInstallationDate() {
         uiLog.notice("\("User has selected a deferral date (\(nudgePrimaryState.deferRunUntil ?? nudgePrimaryState.lastRefreshTime)) that is greater than the launch date (\(Utils().getCurrentDate()))", privacy: .public)")
+        if hideInsteadofQuit {
+            hideNudge = true
+        }
         Utils().exitNudge()
     }
     
@@ -222,10 +225,10 @@ func needToActivateNudge() -> Bool {
     }
     
     // Don't nudge if refresh timer hasn't passed threshold
-//    if (timerController > Int((Utils().getCurrentDate().timeIntervalSince1970 - nudgePrimaryState.lastRefreshTime.timeIntervalSince1970))) && nudgeLogState.afterFirstLaunch  {
-//        uiLog.info("\("Ignoring Nudge activation - Device is currently within current timer range", privacy: .public)")
-//        return false
-//    }
+    if (timerController > Int((Utils().getCurrentDate().timeIntervalSince1970 - nudgePrimaryState.lastRefreshTime.timeIntervalSince1970))) && nudgeLogState.afterFirstLaunch {
+        uiLog.info("\("Ignoring Nudge activation - Device is currently within current timer range", privacy: .public)")
+        return false
+    }
     
     // Aggressive logic
     if frontmostApplication?.bundleIdentifier != nil {
