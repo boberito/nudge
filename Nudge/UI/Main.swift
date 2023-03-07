@@ -17,6 +17,8 @@ let serialNumber = Utils().getSerialNumber()
 let configJSON = Utils().getConfigurationAsJSON()
 let configProfile = Utils().getConfigurationAsProfile()
 
+var hideNudge = false
+
 // Create an AppDelegate so that we can more finely control how Nudge operates
 class AppDelegate: NSObject, NSApplicationDelegate {
     // This allows Nudge to terminate if all of the windows have been closed. It was needed when the close button was visible, but less needed now.
