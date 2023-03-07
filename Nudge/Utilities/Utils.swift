@@ -141,13 +141,15 @@ var cameras: [Camera]  {
 }
 
 struct Utils {
+    
+    
     func activateNudge() {
         utilsLog.info("\("Activating Nudge", privacy: .public)")
         // NSApp.windows[0] is only safe because we have a single window. Should we increase windows, this will be a problem.
         // Sheets do not count as windows though.
 
         // load the blur background and send it to the back if we are past the required install date
-        if pastRequiredInstallationDate() && aggressiveUserFullScreenExperience {
+        if pastRequiredInstallationDate() && aggressiveUserFullScreenExperience{
             Utils().centerNudge()
             NSApp.activate(ignoringOtherApps: true)
             NSApp.windows[0].makeKeyAndOrderFront(self)
@@ -163,13 +165,19 @@ struct Utils {
             NSApp.windows[0].level = NSWindow.Level(rawValue: Int(CGWindowLevelForKey(.maximumWindow) + 1))
             return
         }
+        
 
         if NSWorkspace.shared.isActiveSpaceFullScreen() && !nudgePrimaryState.afterFirstStateChange {
             uiLog.notice("\("Bypassing activation due to full screen bugs in macOS", privacy: .public)")
             return
         } else {
-            NSApp.activate(ignoringOtherApps: true)
-            NSApp.windows[0].makeKeyAndOrderFront(self)
+            if !hideNudge {
+                NSApp.activate(ignoringOtherApps: true)
+                NSApp.windows[0].makeKeyAndOrderFront(self)
+            } else {
+                NSApp.hide(nil)
+            }
+            hideNudge = false
         }
     }
 
@@ -279,11 +287,13 @@ struct Utils {
     }
 
     func exitNudge() {
-        uiLog.notice("\("Nudge is terminating due to condition met", privacy: .public)")
-        nudgePrimaryState.shouldExit = true
         if hideInsteadofQuit {
+            uiLog.notice("\("Nudge is hiding due to condition met", privacy: .public)")
             NSApp.hide(nil)
+            return
         } else {
+            uiLog.notice("\("Nudge is terminating due to condition met", privacy: .public)")
+            nudgePrimaryState.shouldExit = true
             exit(0)
         }
     }
